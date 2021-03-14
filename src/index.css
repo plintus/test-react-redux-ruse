@@ -3,3 +3,29 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.listTable span {
+  padding-right: 20px;
+}
+
+input {
+  margin: 0 10px 5px 0;
+  width: 75px;
+}
+
+.row {
+  display: flex;
+}
+
+.row.header div {
+  padding-bottom: 20px;
+  font-style: italic;
+}
+
+.row div {
+  min-width: 150px;
+}
+
+.inputs {
+  width: 200px;
+}

@@ -1,5 +1,3 @@
-import update from 'immutability-helper';
-
 const duckRoot = 'app/groceries/';
 
 // Constants
@@ -7,6 +5,13 @@ export const ADD_ITEM = `${duckRoot}ADD_ITEM`;
 export const REMOVE_ITEM = `${duckRoot}REMOVE_ITEM`;
 export const SELECT_ITEM = `${duckRoot}SELECT_ITEM`;
 export const DESELECT_ITEM = `${duckRoot}DESELECT_ITEM`;
+
+const noItemSelected = {
+  id: 0,
+  name: '',
+  category: '',
+  deliveryMethod: '',
+}
 
 export const initialState = {
   list: [
@@ -25,7 +30,7 @@ export const initialState = {
     {
       id: 100,
       name: 'Lettuce',
-      category: 'Vegitable',
+      category: 'Vegetable',
       deliveryMethod: 'Ground',
     },
     {
@@ -36,35 +41,58 @@ export const initialState = {
     },
   ],
   isItemSelected: false,
-  selectedItem: {
-    id: 0,
-    name: '',
-    category: '',
-    deliveryMethod: '',
-  },
+  selectedItem: noItemSelected,
 };
 
 // Reducers
 export default function reducer(state = initialState, action) {
   const { type, payload } = action;
 
+  let list = [...state.list];
+
   switch (type) {
     case ADD_ITEM:
-      return update(state, {
-        list: { $push: [payload] },
-      });
+      list.push(payload);
+      
+      return {
+        ...state,
+        list: list
+      }
 
     case REMOVE_ITEM:
-      // Write a custom reducer that will remove an item from the list array
-      return state; 
+      
+      list = list.filter((item) => { 
+        return item.id !== payload 
+      });
+
+      let isItemSelected = state.isItemSelected;
+      let selectedItem = state.selectedItem;
+
+      if( state.isItemSelected && state.selectedItem.id === payload ) {
+        isItemSelected = false;
+        selectedItem = noItemSelected;
+      }
+      
+      return {
+        ...state,
+        list: list,
+        isItemSelected: isItemSelected,
+        selectedItem: selectedItem,
+      };
 
     case SELECT_ITEM:
-      // Write a custom reducer that will select an item
-      return state;
+      return {
+        ...state,
+        isItemSelected: true,
+        selectedItem: payload,
+      };
 
     case DESELECT_ITEM:
-      // Write a customer reducer that will deselect an item
-      return state;
+      return {
+        ...state,
+        isItemSelected: false,
+        selectedItem: noItemSelected
+      };
 
     default:
       return state;
@@ -74,5 +102,20 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 export const addItem = item => ({
   type: ADD_ITEM,
+  payload: item,
+});
+
+export const removeItem = item => ({
+  type: REMOVE_ITEM,
+  payload: item,
+});
+
+export const selectItem = item => ({
+  type: SELECT_ITEM,
+  payload: item,
+});
+
+export const deselectItem = item => ({
+  type: DESELECT_ITEM,
   payload: item,
 });

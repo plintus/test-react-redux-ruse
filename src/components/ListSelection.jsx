@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useEffect }  from 'react';
 
-const ListSelection = () => (
-  <div className="listSelection">
-    ListSelection
-  </div>
-);
+const ListSelection = ({ selectedItem }) => {
+
+  useEffect(() => {
+    console.log("Component mounted...");
+  }, []);
+
+  return (
+    <div className="listSelection">
+      {!selectedItem.name && "Please, make a selection."}
+
+      {selectedItem.name}<br />
+      {selectedItem.category}<br />
+      {selectedItem.deliveryMethod}<br />
+    </div>
+  )
+};
 
 export default ListSelection;
